@@ -1,0 +1,24 @@
+{
+  "name": "slobs_akai_remote",
+  "version": "0.1.0",
+  "description": "uses slobs api to allow a midi controller to control different aspects of Streamlabs",
+  "main": "app.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Grant McNaught",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^26.4.2",
+    "prettier": "^2.1.2"
+  },
+  "dependencies": {
+    "config": "^3.3.2",
+    "easymidi": "2.0.1",
+    "jayson": "3.3.4"
+  }
+}
