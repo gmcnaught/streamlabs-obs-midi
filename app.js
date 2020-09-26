@@ -9,6 +9,7 @@ const slobs = new Slobs('foo');
 slobs.init();
 
 async function main() {
+  console.log('Initializing...');
   initMidi();
 }
 
