@@ -41,7 +41,7 @@ function calculateDeflection(currentVal) {
 async function midiToResource(msg) {
   if (msg._type === 'cc') {
     let mapping = {
-      5: 'Audio Input Capture',
+      5: 'Mic/Aux',
       6: 'Desktop Audio',
       7: 'Alertbox'
     };
@@ -54,14 +54,14 @@ async function midiToResource(msg) {
     );
   } else if (msg._type === 'noteoff') {
     let mapping = {
-      36: toggleMute.bind(this,'Audio Input Capture'),
+      36: toggleMute.bind(this,'Mic/Aux'),
       37: toggleMute.bind(this,'Desktop Audio'),
-      38: toggleVisibility.bind(this,'logitech webcam'),
+      38: toggleVisibility.bind(this,'Webcam Source'),
       39: toggleVisibility.bind(this,'Game Capture'),
-      40: null,
-      41: null,
-      42: null,
-      43: null
+      40: switchScene.bind(this,'Live Scene'),
+      41: switchScene.bind(this,'Cam-Closeup'),
+      42: switchScene.bind(this,'Be Right Back'),
+      43: switchScene.bind(this,'Stream Ending Soon')
     };
     let result = await mapping[msg.note]();
   } //else console.log(msg);
@@ -80,12 +80,21 @@ async function toggleMute(deviceName) {
   return update;
 }
 async function toggleVisibility(deviceName){
-  console.log(deviceName);
+  //console.log(deviceName);
   let activeScene = await slobs.basicRequest('ScenesService','activeScene');
   //console.log (activeScene.result.nodes);
   let itemRef= activeScene.result.nodes.find( item => item.name === deviceName);
-  console.log(itemRef);
+  //console.log(itemRef);
   let update = await slobs.setValues(itemRef.resourceId,'setVisibility',[!itemRef.visible]);
   return update;
+}
+
+async function switchScene(sceneName) {
+  let scenes = await slobs.basicRequest('ScenesService','getScenes');
+  console.log(scenes);
+  let itemRef = scenes.result.find( item => item.name === sceneName);
+  console.log(itemRef)
+  let update = await slobs.setValues('ScenesService','makeSceneActive',[itemRef.id])
+
 }
 main();
